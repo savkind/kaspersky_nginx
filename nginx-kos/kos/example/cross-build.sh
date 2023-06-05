@@ -35,4 +35,4 @@ $SDK_PREFIX/toolchain/bin/cmake -G "Unix Makefiles" \
       -D CMAKE_INSTALL_PREFIX:STRING=$INSTALL_PREFIX \
       -D CMAKE_FIND_ROOT_PATH="$SDK_PREFIX/sysroot-$TARGET" \
       -D CMAKE_TOOLCHAIN_FILE=$SDK_PREFIX/toolchain/share/toolchain-$TARGET$TOOLCHAIN_SUFFIX.cmake \
-      $SCRIPT_DIR/ && $SDK_PREFIX/toolchain/bin/cmake --build . --target sim
+      $SCRIPT_DIR/ && make kos-image

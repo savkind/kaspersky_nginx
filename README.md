@@ -32,7 +32,7 @@
 
 4. Запустить скрипт sudo -E /etc/nginx-kos/kos/nginx/install.sh
 
-5. Запустить скрипт sudo -E /etc/nginx-kos/kos/nginx/example/cross-build.sh
+5. Запустить скрипт sudo -E /etc/nginx-kos/kos/nginx/example/cross-build.sh с изменением последней строки на $SCRIPT_DIR/ && make kos-image
 
 6. Подключить SD-карту к ПК
 
