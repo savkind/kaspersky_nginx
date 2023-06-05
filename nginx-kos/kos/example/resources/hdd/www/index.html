@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Умный дом</title>
+<style>
+body {
+  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  gap: 20px;
+}
+
+.devices-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.device {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  font-size: 18px;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.3s;
+}
+
+.device:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.device img {
+  max-width: 100%;
+  max-height: 80%;
+  transition: opacity 0.3s;
+}
+
+.device .device-buttons {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.device:hover .device-buttons {
+  opacity: 1;
+}
+
+.toggle-button {
+  margin: 0;
+  padding: 5px 10px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.toggle-button:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.toggle-button:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.popup-label {
+  margin-bottom: 10px;
+}
+
+.popup-input {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.popup-button {
+  padding: 5px 10px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+</style>
+<script>
+var devices = [
+  { name: "Lamp", value: 0, opacity: 1, inputValue: "" },
+  { name: "Lamp", value: 0, opacity: 1, inputValue: "" },
+  { name: "WashingMachine", value: 0, opacity: 1, inputValue: "" },
+  { name: "WashingMachine", value: 0, opacity: 1, inputValue: "" },
+  { name: "TV", value: 0, opacity: 1, inputValue: "" },
+  { name: "Security", value: 0, opacity: 1, inputValue: "" }
+];
+
+function toggleDevice(index) {
+  var device = devices[index];
+  device.value = (device.value === 0) ? 1 : 0;
+  updateDevice(index);
+}
+
+function toggleOpacity(index, opacity) {
+  devices[index].opacity = opacity;
+  updateDevice(index);
+}
+
+function openPopup(index) {
+  var device = devices[index];
+  var popup = document.createElement("div");
+  popup.className = "popup";
+
+  var popupLabel = document.createElement("label");
+  popupLabel.textContent = getPopupLabelText(device.name);
+  popupLabel.className = "popup-label";
+  popup.appendChild(popupLabel);
+
+  var popupInput = document.createElement("input");
+  popupInput.type = "text";
+  popupInput.className = "popup-input";
+  popupInput.value = device.inputValue; // Заполняем поле значением, если оно ранее было введено
+  popup.appendChild(popupInput);
+
+  var popupButton = document.createElement("button");
+  popupButton.textContent = "Применить";
+  popupButton.className = "popup-button";
+  popupButton.onclick = function () {
+    applyPopupValue(index, popupInput.value);
+    document.body.removeChild(popup);
+  };
+  popup.appendChild(popupButton);
+
+  document.body.appendChild(popup);
+}
+
+function applyPopupValue(index, value) {
+  var device = devices[index];
+  device.inputValue = value; // Сохраняем введенное значение
+  if (device.name === "Lamp") {
+    // Применить значение для лампы (в данном случае цвет)
+    console.log("Применено значение для лампы:", value);
+  } else {
+    // Обработка других устройств
+  }
+}
+
+function getPopupLabelText(deviceName) {
+  switch (deviceName) {
+    case "Lamp":
+      return "Введите цвет:";
+    case "Kettle":
+      return "Введите температуру:";
+    case "WashingMachine":
+      return "Введите необходимую температуру в комнате:";
+    case "TV":
+      return "Длительность полива в минутах:";
+    case "Camera":
+      return "Введите угол обзора:";
+    case "Security":
+      return "Введите пароль:";
+    default:
+      return "";
+  }
+}
+
+function updateDevice(index) {
+  var device = devices[index];
+  var deviceElement = document.getElementById("device" + index);
+  var deviceImage = deviceElement.querySelector("img");
+  var deviceButtons = deviceElement.querySelector(".device-buttons");
+
+  if (device.value === 0) {
+    deviceButtons.style.opacity = 0;
+  } else {
+    deviceButtons.style.opacity = 1;
+  }
+
+  deviceImage.style.opacity = device.opacity;
+}
+
+function renderDevices() {
+  var devicesContainer = document.getElementById("devices-container");
+  devicesContainer.innerHTML = "";
+
+  for (var i = 0; i < devices.length; i++) {
+    var device = devices[i];
+    var deviceElement = document.createElement("div");
+    deviceElement.id = "device" + i;
+    deviceElement.className = "device";
+    deviceElement.onclick = (function (index) {
+      return function () {
+        toggleDevice(index);
+      };
+    })(i);
+
+    var image = new Image();
+    image.src = "images/" + device.name + ".png"; 211
+    deviceElement.appendChild(image);
+
+    var deviceButtons = document.createElement("div");
+    deviceButtons.className = "device-buttons";
+
+    var enableButton = document.createElement("span");
+    enableButton.className = "toggle-button";
+    enableButton.textContent = "Вкл";
+    enableButton.onclick = (function (index) {
+      return function (event) {
+        event.stopPropagation();
+        toggleOpacity(index, 1);
+      };
+    })(i);
+    deviceButtons.appendChild(enableButton);
+
+    var disableButton = document.createElement("span");
+    disableButton.className = "toggle-button";
+    disableButton.textContent = "Выкл";
+    disableButton.onclick = (function (index) {
+      return function (event) {
+        event.stopPropagation();
+        toggleOpacity(index, 0.5);
+      };
+    })(i);
+    deviceButtons.appendChild(disableButton);
+
+    var configButton = document.createElement("span");
+    configButton.className = "toggle-button";
+    configButton.textContent = "Настройки";
+    configButton.onclick = (function (index) {
+      return function (event) {
+        event.stopPropagation();
+        openPopup(index);
+      };
+    })(i);
+    deviceButtons.appendChild(configButton);
+
+    deviceElement.appendChild(deviceButtons);
+
+    devicesContainer.appendChild(deviceElement);
+    updateDevice(i);
+  }
+}
+</script>
+</head>
+<body onload="renderDevices()">
+<h1>Умный дом</h1>
+<div class="devices-container" id="devices-container"></div>
+</body>
+</html>
