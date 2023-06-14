@@ -28,6 +28,12 @@ include_directories (${rump_INCLUDE})
 find_package (precompiled_vfs REQUIRED)
 include_directories (${precompiled_vfs_INCLUDE})
 
+find_package (bsp REQUIRED)
+include_directories (${bsp_INCLUDE})
+
+find_package (i2c REQUIRED)
+include_directories (${i2c_INCLUDE})
+
 # Choose the storage devices for the configuration files.
 # If none of the options are selected, the ramfs device is used.
 option (ROOTFS_SDCARD   "Use SD card to get configuration file" OFF)
