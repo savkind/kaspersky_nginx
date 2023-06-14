@@ -18,6 +18,8 @@ entities:
   connections:
   - target: kl.VfsNet
     id: kl.VfsNet
+  - target: kl.drivers.I2C
+    id: kl.drivers.I2C
   - target: @ROOTFS_ENTITY@
     id: @ROOTFS_ENTITY@
 @INIT_Nginx_ENTITY_CONNECTIONS+@
