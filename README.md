@@ -12,7 +12,7 @@
 
 * `kl.VfsNet` > `kl.drivers.GPIO`
 
-  `kl.drivers.GPIO` > `kl.drivers.I2C`	
+* `nginx.Nginx` > `kl.drivers.I2C`	
 
 * `kl.rump.Dhcpcd` > `kl.VfsRamFs`
 
