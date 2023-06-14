@@ -14,6 +14,7 @@ use EDL kl.drivers.RAMDisk
 use EDL kl.rump.Dhcpcd
 use EDL kl.drivers.BSP
 use EDL kl.drivers.GPIO
+use EDL kl.drivers.I2C
 
 /* Allows any task to return errors. */
 error
@@ -78,6 +79,11 @@ execute src = Einit, dst = kl.rump.Dhcpcd
 }
 
 execute src = Einit, dst = kl.drivers.BSP
+{
+    grant()
+}
+
+execute src=Einit, dst=kl.drivers.I2C
 {
     grant()
 }
@@ -447,6 +453,26 @@ request src = kl.rump.Dhcpcd, dst = kl.VfsSdCardFs
 }
 
 response src = kl.VfsSdCardFs, dst = kl.rump.Dhcpcd
+{
+    grant()
+}
+
+request src=kl.drivers.I2C, dst=kl.core.Core
+{
+    grant()
+}
+
+response src=kl.core.Core, dst=kl.drivers.I2C
+{
+    grant()
+}
+
+request src=nginx.Nginx, dst=kl.drivers.I2C
+{
+    grant()
+}
+
+response src=kl.drivers.I2C, dst=nginx.Nginx
 {
     grant()
 }
